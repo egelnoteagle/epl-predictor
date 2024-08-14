@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Box, Heading, List, ListItem, Button, Text } from '@chakra-ui/react';
 import api from '../api/axios';
 
 function PredictPage() {
@@ -6,39 +7,57 @@ function PredictPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch the current week's games from the backend
-    api.get('/games')
-      .then(response => {
-        setGames(response.data);
+    const fetchFixtures = async () => {
+      try {
+        const response = await api.get('/fixtures', {
+          params: {
+            league: '39',  // EPL League ID
+            season: '2023', // Season
+            round: 'Regular Season - 1', // Round number or description
+          },
+        });
+        setGames(response.data.response || []); // API returns fixtures in response.data.response
         setLoading(false);
-      })
-      .catch(error => {
-        console.error('Error fetching games:', error);
+      } catch (error) {
+        console.error('Error fetching fixtures:', error);
         setLoading(false);
-      });
+      }
+    };
+
+    fetchFixtures();
   }, []);
 
   const handlePrediction = (gameId, prediction) => {
-    // Handle prediction logic (you can send the prediction to the backend here)
     console.log(`Game ID: ${gameId}, Prediction: ${prediction}`);
+    // TODO: Store this prediction in your backend
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Text>Loading...</Text>;
 
   return (
-    <div>
-      <h1>Make Your Predictions</h1>
-      <ul>
+    <Box p={4}>
+      <Heading as="h1" size="xl" mb={6}>
+        Make Your Predictions
+      </Heading>
+      <List spacing={3}>
         {games.map(game => (
-          <li key={game.id}>
-            {game.homeTeam} vs {game.awayTeam}
-            <button onClick={() => handlePrediction(game.id, 'home')}>Home Win</button>
-            <button onClick={() => handlePrediction(game.id, 'away')}>Away Win</button>
-            <button onClick={() => handlePrediction(game.id, 'draw')}>Draw</button>
-          </li>
+          <ListItem key={game.fixture.id} mb={4}>
+            <Text mb={2}>
+              {game.teams.home.name} vs {game.teams.away.name}
+            </Text>
+            <Button colorScheme="teal" onClick={() => handlePrediction(game.fixture.id, 'home')}>
+              Home Win
+            </Button>
+            <Button colorScheme="teal" onClick={() => handlePrediction(game.fixture.id, 'away')}>
+              Away Win
+            </Button>
+            <Button colorScheme="teal" onClick={() => handlePrediction(game.fixture.id, 'draw')}>
+              Draw
+            </Button>
+          </ListItem>
         ))}
-      </ul>
-    </div>
+      </List>
+    </Box>
   );
 }
 
