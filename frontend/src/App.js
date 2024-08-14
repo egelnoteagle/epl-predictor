@@ -1,12 +1,13 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import React from 'react';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import PredictPage from './pages/PredictPage';
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<div>Home</div>} />
-        <Route path="/predict" element={<div>Predict</div>} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/predict" element={<PredictPage />} />
       </Routes>
     </Router>
   );

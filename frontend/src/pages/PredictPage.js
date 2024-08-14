@@ -1,20 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 
 function PredictPage() {
   const [games, setGames] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Fetch the current week's games from the backend
-    axios.get('/api/games')
-      .then(response => setGames(response.data))
-      .catch(error => console.error('Error fetching games:', error));
+    api.get('/games')
+      .then(response => {
+        setGames(response.data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching games:', error);
+        setLoading(false);
+      });
   }, []);
 
   const handlePrediction = (gameId, prediction) => {
-    // Logic to handle predictions
+    // Handle prediction logic (you can send the prediction to the backend here)
     console.log(`Game ID: ${gameId}, Prediction: ${prediction}`);
   };
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div>
