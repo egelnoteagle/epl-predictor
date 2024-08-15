@@ -1,15 +1,17 @@
-from flask import render_template
-from app.main import bp
+from flask import render_template, Blueprint
+from app import db
+
+# Create a Blueprint for routes
+bp = Blueprint('main', __name__)
 
 @bp.route('/')
-def index():
-    # Placeholder logic for standings
-    standings = []  # Replace with actual logic to fetch standings
-    return render_template('index.html', standings=standings)
+def home():
+    # This renders a template, could be home.html or index.html
+    return render_template('home.html')
 
-@bp.route('/predict', methods=['GET', 'POST'])
+@bp.route('/predict', methods=['GET', 'POST'], endpoint='main.predict')
 def predict():
-    # Placeholder logic for fetching games
-    games = []  # Replace with actual logic to fetch games
-    # Logic for handling predictions (form submission, etc.)
-    return render_template('predict.html', games=games)
+    # Add logic for prediction
+    return render_template('predict.html')
+
+# Add more routes as necessary for your app

@@ -5,7 +5,7 @@ services:
       - "5001:5000"
     environment:
       - FLASK_ENV=development
-      - DATABASE_URL=postgresql://user:password@db/epl_predictor
+      - DATABASE_URL=postgresql://degel55:Frunkuss55!@192.168.0.206:5432/epl_predictor
     volumes:
       - .:/app
     depends_on:
@@ -14,8 +14,8 @@ services:
   db:
     image: postgres:13
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: degel55
+      POSTGRES_PASSWORD: Frunkuss55!
       POSTGRES_DB: epl_predictor
     volumes:
       - pgdata:/var/lib/postgresql/data
